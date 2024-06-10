@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "gU4rOzhUWGx7W+leiLC03CZ+D57+xZuB9uXgap6GW5NVJWax3ddCZhYaujwiyossKO+8zZYk7M2lqlK2b/RINw==",
+  "dgSpecHash": "sTHQEfD6w8XPt22INGkiFLXe187qC4tOPglhYa/35q/DGWMVM17uqtGz3z89wAiIflVdQCIUHYg6Zyb+547X7g==",
   "success": true,
   "projectFilePath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\79048\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\79048\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
