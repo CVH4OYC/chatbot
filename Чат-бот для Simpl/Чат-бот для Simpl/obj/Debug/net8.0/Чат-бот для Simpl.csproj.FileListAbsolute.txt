@@ -1,0 +1,14 @@
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.exe
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.deps.json
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.runtimeconfig.json
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.dll
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.pdb
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.AssemblyInfoInputs.cache
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.AssemblyInfo.cs
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.csproj.CoreCompileInputs.cache
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.dll
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\refint\Чат-бот для Simpl.dll
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.pdb
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.genruntimeconfig.cache
+C:\Users\79048\Desktop\Универ\ГПР\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\ref\Чат-бот для Simpl.dll

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Чат-бот для Simpl/1.0.0": {
+        "runtime": {
+          "Чат-бот для Simpl.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Чат-бот для Simpl/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
