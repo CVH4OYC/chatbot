@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\79048\\Desktop\\Универ\\ГПР\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {}
+    "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {}
   },
   "projects": {
-    "C:\\Users\\79048\\Desktop\\Универ\\ГПР\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {
+    "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\79048\\Desktop\\Универ\\ГПР\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+        "projectUniqueName": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
         "projectName": "Чат-бот для Simpl",
-        "projectPath": "C:\\Users\\79048\\Desktop\\Универ\\ГПР\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+        "projectPath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
         "packagesPath": "C:\\Users\\79048\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\79048\\Desktop\\Универ\\ГПР\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
+        "outputPath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\79048\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -44,6 +44,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Telegram.Bot": {
+              "target": "Package",
+              "version": "[19.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
