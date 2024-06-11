@@ -31,3 +31,22 @@ C:\Users\79048\Documents\GitHub\chatbot\Чат-бот для Simpl\Чат-бот
 C:\Users\79048\Documents\GitHub\chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.pdb
 C:\Users\79048\Documents\GitHub\chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.genruntimeconfig.cache
 C:\Users\79048\Documents\GitHub\chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\ref\Чат-бот для Simpl.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.exe
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.deps.json
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.runtimeconfig.json
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Чат-бот для Simpl.pdb
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\bin\Debug\net8.0\Telegram.Bot.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.csproj.AssemblyReference.cache
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.AssemblyInfoInputs.cache
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.AssemblyInfo.cs
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.csproj.CoreCompileInputs.cache
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.sourcelink.json
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот .AA35252F.Up2Date
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\refint\Чат-бот для Simpl.dll
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.pdb
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\Чат-бот для Simpl.genruntimeconfig.cache
+C:\Programs\Projects\Chatbot\Чат-бот для Simpl\Чат-бот для Simpl\obj\Debug\net8.0\ref\Чат-бот для Simpl.dll
