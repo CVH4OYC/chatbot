@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Чат-бот для Simpl")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+771ba41a01504bdcc948f05472d48534d1d23ecd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52b588f40ea3481271c674fd7c963158514f9120")]
 [assembly: System.Reflection.AssemblyProductAttribute("Чат-бот для Simpl")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Чат-бот для Simpl")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

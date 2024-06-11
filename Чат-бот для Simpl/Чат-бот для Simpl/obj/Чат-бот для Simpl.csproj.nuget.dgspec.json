@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {}
+    "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {}
   },
   "projects": {
-    "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {
+    "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+        "projectUniqueName": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
         "projectName": "Чат-бот для Simpl",
-        "projectPath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
-        "packagesPath": "C:\\Users\\79048\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
+        "projectPath": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+        "packagesPath": "C:\\Users\\sizov\\.nuget\\packages\\",
+        "outputPath": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\79048\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\sizov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -66,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

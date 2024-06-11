@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+/*Сonfig.JSON
+/Сonfig.JSON
+/Чат-бот для Simpl/Сonfig.JSON
+/Чат-бот для Simpl/Чат-бот для Simpl/Сonfig.JSON
+
 # User-specific files
 *.rsuser
 *.suo
