@@ -16,15 +16,15 @@ namespace Чат_бот_для_Simpl
         {
             if (update.Message?.Text == "/start")
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!");
             }
             else if (update.Message?.Text == "/help")
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Мои команды\n/start\n/help", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Мои команды\n/start\n/help");
             }
             else
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, update.Message?.Text ?? "[не текст]", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, update.Message?.Text ?? "[не текст]");
             }
         }
     }

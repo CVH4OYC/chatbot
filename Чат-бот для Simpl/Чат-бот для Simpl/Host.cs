@@ -25,7 +25,7 @@ namespace Чат_бот_для_Simpl
 
             // подписка на получение сообщений от обработчика
             MessageHandler messageHandler = new MessageHandler();
-            OnMessage += messageHandler.OnMessage;
+            OnMessage += messageHandler.OnMessage; //подписка
         }
 
         // это для обработки ошибок, если они будут возникать
