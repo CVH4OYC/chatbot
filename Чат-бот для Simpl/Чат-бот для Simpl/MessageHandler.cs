@@ -51,19 +51,26 @@ namespace Чат_бот_для_Simpl
 
         // кнопочки в клавиатуре
         // update.Message?.Text  - название кнопки
-        private IReplyMarkup MyButtonsy(){   
+        private IReplyMarkup MyButtonsy()
+        {
             return new ReplyKeyboardMarkup(
-                new List<List<KeyboardButton>>{
-                    new List<KeyboardButton> {  // первая строка кнопочек
+                new List<List<KeyboardButton>>
+                {
+                    new List<KeyboardButton> // первая строка кнопочек
+                    {
                         new KeyboardButton(ButtonFAQ),
                         new KeyboardButton(ButtonHR)
                     },
-                    new List<KeyboardButton> {  // вторая строка кнопочек
+                    new List<KeyboardButton> // вторая строка кнопочек
+                    {
                         new KeyboardButton(ButtonMood)
                     }
                 }
-            );
-        } 
+            )
+            {
+                ResizeKeyboard = true
+            };
+        }
 
         // Кнопочки прямо под стартовым сообщением
         // если брать такой вариант, то каждая кнопка будет посылать callbackData 
