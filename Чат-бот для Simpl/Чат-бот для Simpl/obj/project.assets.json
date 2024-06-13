@@ -86,19 +86,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sizov\\.nuget\\packages\\": {}
+    "C:\\Users\\Lada\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+      "projectUniqueName": "C:\\Users\\Lada\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
       "projectName": "Чат-бот для Simpl",
-      "projectPath": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
-      "packagesPath": "C:\\Users\\sizov\\.nuget\\packages\\",
-      "outputPath": "C:\\Programs\\Projects\\Chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
+      "projectPath": "C:\\Users\\Lada\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\Чат-бот для Simpl.csproj",
+      "packagesPath": "C:\\Users\\Lada\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lada\\Documents\\GitHub\\chatbot\\Чат-бот для Simpl\\Чат-бот для Simpl\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\sizov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lada\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -150,7 +150,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
