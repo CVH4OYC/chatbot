@@ -21,7 +21,7 @@ namespace Чат_бот_для_Simpl
         {
             if (update.Message?.Text == "/start")
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!");
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!",replyMarkup: MyButtonsy());
             }
             else if (update.Message?.Text == "/help")
             {
