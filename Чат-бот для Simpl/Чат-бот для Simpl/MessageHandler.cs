@@ -21,31 +21,30 @@ namespace Чат_бот_для_Simpl
         {
             if (update.Message?.Text == "/start")
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!", replyToMessageId: update.Message?.MessageId,
-                 replyMarkup: MyButtonsy());
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Добро пожаловать!");
             }
             else if (update.Message?.Text == "/help")
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Мои команды\n/start\n/help", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Мои команды\n/start\n/help");
             }
             else if (update.Message?.Text == ButtonFAQ)
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "ну хз...", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "ну хз...");
                 // do something
             }
             else if (update.Message?.Text == ButtonHR)
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "все ушли на обед", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "все ушли на обед");
                 // do something
             }
             else if (update.Message?.Text == ButtonMood)
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "(⌒‿⌒)", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "(⌒‿⌒)");
                 // do something
             }
             else
             {
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, update.Message?.Text ?? "[не текст]", replyToMessageId: update.Message?.MessageId);
+                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, update.Message?.Text ?? "[не текст]");
             }
         }
 
