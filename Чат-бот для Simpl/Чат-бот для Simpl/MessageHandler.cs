@@ -12,7 +12,7 @@ namespace Чат_бот_для_Simpl
     class MessageHandler
     {
         const string ButtonFAQ = "FAQ";
-        const string ButtonHR = "Связаться с HR";
+        const string ButtonHR = "Связаться с HR"; // кнопка актив
         const string ButtonMood = "Мое настроение o(>ω<)o";
 
         private long botOwnerID = 5841322604; // HINT: пока что захардкодил тут свой тг, потом можно через конфиг считывать
