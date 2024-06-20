@@ -19,10 +19,12 @@ namespace Чат_бот_для_Simpl
             {
                 // Для безопасности токен бота должен находиться в отдельном файле, который включен в .gitignore
                 string path = "../../../Config.JSON";
-                var Config = ReadJSON(path);
-                var Token = Config["Token"]; // считываем токен
+                var config = ReadJSON(path);
+                var token = config["Token"]; // считываем токен
+                var faqFilePath = config["FAQFilePath"]; // считываем путь до файла с FAQ
 
-                Host bot = new Host(Token);
+
+                Host bot = new Host(token,faqFilePath);
                 bot.Start();
                 Console.ReadLine();
             }

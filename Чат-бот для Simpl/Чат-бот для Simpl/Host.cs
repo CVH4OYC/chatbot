@@ -13,9 +13,14 @@ namespace Чат_бот_для_Simpl
         private TelegramBotClient _bot;
         private Action<ITelegramBotClient, Update>? OnMessage; // делегат
 
-        public Host(string token)
+        private IFAQLoader _faqLoader;
+        private Dictionary<string, string> _faq;
+
+        public Host(string token, string faqFilePath)
         {
             _bot = new TelegramBotClient(token);
+            _faqLoader = new FileFAQLoader(); // тут определяем загрузчик (файл/БД)
+            _faq = _faqLoader.LoadFAQ(faqFilePath); // загрузка FAQ 
         }
 
         public void Start()
@@ -24,7 +29,7 @@ namespace Чат_бот_для_Simpl
             Console.WriteLine("Бот запущен");
 
             // подписка на получение сообщений от обработчика
-            MessageHandler messageHandler = new MessageHandler();
+            MessageHandler messageHandler = new MessageHandler(_faq);
             OnMessage += messageHandler.OnMessage;
         }
 

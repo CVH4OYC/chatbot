@@ -12,11 +12,19 @@ namespace Чат_бот_для_Simpl
         const string ButtonHR = "Связаться с HR";
         const string ButtonMood = "Мое настроение o(>ω<)o";
 
-        private long botOwnerID = 1607927336; // временное айди HR
+        private long botOwnerID = 746106815; // временное айди HR
 
         // словарь для отслеживания состояния пользователей
         private Dictionary<long, string> userStates = new Dictionary<long, string>();
 
+        // словарь с вопросами и ответами 
+        private Dictionary<string, string> _faq;
+        private InlineKeyboardMarkup _faqInlineKeyboard; // Кэш inline клавиатуры FAQ
+        public MessageHandler(Dictionary<string, string> faq)
+        {
+            _faq = faq;
+            _faqInlineKeyboard = BuildInlineKeyboard();
+        }
         public async void OnMessage(ITelegramBotClient client, Update update)
         {
             try
@@ -31,8 +39,7 @@ namespace Чат_бот_для_Simpl
                 }
                 else if (update.Message?.Text == ButtonFAQ)
                 {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "ну хз...");
-                    // do something
+                    await ShowFAQ(client, update.Message.Chat.Id);
                 }
                 else if (update.Message?.Text == ButtonHR)
                 {
@@ -44,6 +51,10 @@ namespace Чат_бот_для_Simpl
                 {
                     await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "(⌒‿⌒)");
                     // do something
+                }
+                else if (update.CallbackQuery != null) // Обработка callback-запросов
+                {
+                    await HandleCallbackQuery(client, update.CallbackQuery);
                 }
                 else
                 {
@@ -94,23 +105,59 @@ namespace Чат_бот_для_Simpl
             };
         }
 
-        // Кнопочки прямо под стартовым сообщением
-        // если брать такой вариант, то каждая кнопка будет посылать callbackData 
-        // ибо создать inline кнопку только с текстовым полем нельзя
-        //
-        // private IReplyMarkup MyButtonsy()
-        // {          
-        //     return new InlineKeyboardMarkup(
-        //         new []{
-        //             new []{
-        //                 InlineKeyboardButton.WithCallbackData(ButtonFAQ, "нажали_кн1"),
-        //                 InlineKeyboardButton.WithCallbackData(ButtonHR, "нажали_кн2")
-        //             },
-        //             new[]{
-        //                 InlineKeyboardButton.WithCallbackData(ButtonMood, "нажали_кн3")
-        //             }
-        //         }
-        //     );
-        // } 
+        // отображает inline клавиатуру с вопросами
+        private async Task ShowFAQ(ITelegramBotClient client, long chatId)
+        {
+            try
+            {
+                await client.SendTextMessageAsync(chatId, "Выберите вопрос из FAQ:", replyMarkup: _faqInlineKeyboard);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при выводе FAQ: {ex.Message}");
+                await client.SendTextMessageAsync(chatId, "Произошла ошибка при выводе FAQ.");
+            }
+        }
+        // создаём inline клавиаутур из вопросов, хранящихся в словаре
+        private InlineKeyboardMarkup BuildInlineKeyboard()
+        {
+            var inlineKeyboard = new List<List<InlineKeyboardButton>>();
+
+            foreach (var question in _faq.Keys)
+            {
+                var row = new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(question)
+                };
+                inlineKeyboard.Add(row);
+            }
+
+            return new InlineKeyboardMarkup(inlineKeyboard);
+        }
+        //для обработки ответов с inline клавиатуры
+        private async Task HandleCallbackQuery(ITelegramBotClient client, CallbackQuery callbackQuery)
+        {
+            try
+            {
+                string question = callbackQuery.Data;
+
+                if (_faq.ContainsKey(question))
+                {
+                    string answer = _faq[question];
+                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет: {answer}");
+                }
+                else
+                {
+                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Ответ на этот вопрос не найден.");
+                }
+
+                // Удаление инлайн клавиатуры после нажатия
+                await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при обработке callback-запроса: {ex.Message}");
+            }
+        }
     }
 }
