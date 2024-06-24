@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Чат_бот_для_Simpl.Чат_бот_для_Simpl;
 
 namespace Чат_бот_для_Simpl
 {
@@ -13,14 +14,15 @@ namespace Чат_бот_для_Simpl
         private TelegramBotClient _bot;
         private Action<ITelegramBotClient, Update>? OnMessage; // делегат
 
-        private IFAQLoader _faqLoader;
+        private Database _db;
         private Dictionary<string, string> _faq;
 
-        public Host(string token, string faqFilePath)
+
+        public Host(string token, string dbConnectionString)
         {
             _bot = new TelegramBotClient(token);
-            _faqLoader = new FileFAQLoader(); // тут определяем загрузчик (файл/БД)
-            _faq = _faqLoader.LoadFAQ(faqFilePath); // загрузка FAQ 
+            _db = new Database(dbConnectionString); // используем загрузчик из базы данных
+            _faq = _db.LoadFAQ(); // загрузка FAQ из базы данных
         }
 
         public void Start()

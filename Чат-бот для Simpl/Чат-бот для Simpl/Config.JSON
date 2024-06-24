@@ -1,4 +1,9 @@
 {
   "Token": "7043138381:AAFo4oZ1iJXH0yy9yAUCP5iKnYjgXWzOMtE",
-  "FAQFilePath": "../../../FAQ.txt"
+  "FAQFilePath": "../../../FAQ.txt",
+  "Host": "rc1b-vqzptbm9uclxmco7.mdb.yandexcloud.net",
+  "Port": "6432",
+  "Username": "user1",
+  "Password": "bimbambom",
+  "DatabaseName": "simpl_db"
 }

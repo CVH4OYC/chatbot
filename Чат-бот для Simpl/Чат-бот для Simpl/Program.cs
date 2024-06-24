@@ -21,10 +21,10 @@ namespace Чат_бот_для_Simpl
                 string path = "../../../Config.JSON";
                 var config = ReadJSON(path);
                 var token = config["Token"]; // считываем токен
-                var faqFilePath = config["FAQFilePath"]; // считываем путь до файла с FAQ
+                var dbConnectionString = $"Host={config["Host"]};Port={config["Port"]};Username={config["Username"]};Password={config["Password"]};Database={config["DatabaseName"]};Ssl Mode=Require;Trust Server Certificate=true;";
 
 
-                Host bot = new Host(token,faqFilePath);
+                Host bot = new Host(token, dbConnectionString);
                 bot.Start();
                 Console.ReadLine();
             }
