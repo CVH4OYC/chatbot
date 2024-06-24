@@ -1,0 +1,7 @@
+{
+  "Database": "simpl_db",
+  "Host": "rc1b-vqzptbm9uclxmco7.mdb.yandexcloud.net",
+  "Port": "6432",
+  "Username": "user1",
+  "Password": "bimbambom"
+}

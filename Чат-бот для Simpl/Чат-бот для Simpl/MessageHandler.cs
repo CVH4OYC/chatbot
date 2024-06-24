@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Чат_бот_для_Simpl
@@ -144,7 +145,7 @@ namespace Чат_бот_для_Simpl
                 if (_faq.ContainsKey(question))
                 {
                     string answer = _faq[question];
-                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет: {answer}");
+                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
                 }
                 else
                 {
