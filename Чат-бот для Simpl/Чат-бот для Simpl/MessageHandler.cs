@@ -1,12 +1,12 @@
-﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FuzzySharp;
+using Npgsql;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using Чат_бот_для_Simpl.Чат_бот_для_Simpl;
-using FuzzySharp;
 
 namespace Чат_бот_для_Simpl
 {
@@ -18,20 +18,20 @@ namespace Чат_бот_для_Simpl
 
         private long botOwnerID = 746106815; // временное айди HR
 
-        // словарь для отслеживания состояния пользователей (для связи с HR и указания настроения)
         private Dictionary<long, string> userStates = new Dictionary<long, string>();
 
-        // словарь с вопросами и ответами 
         private Dictionary<string, string> _faq;
-        private InlineKeyboardMarkup _faqInlineKeyboard; // Кэш inline клавиатуры FAQ
+        private InlineKeyboardMarkup _faqInlineKeyboard;
 
-        private Database _db; // через этот объект обращение к бд (в Database прописать нужные методы)
+        private Database _db;
+
         public MessageHandler(Dictionary<string, string> faq, Database db)
         {
             _faq = faq;
             _db = db;
             _faqInlineKeyboard = BuildInlineKeyboard();
         }
+
         public async void OnMessage(ITelegramBotClient client, Update update)
         {
             try
@@ -51,36 +51,38 @@ namespace Чат_бот_для_Simpl
                 else if (update.Message?.Text == ButtonHR)
                 {
                     await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Пожалуйста, введите ваш вопрос.");
-                    // состояние пользователя в ожидании вопроса
                     userStates[update.Message.Chat.Id] = "awaiting_hr_question";
                 }
                 else if (update.Message?.Text == ButtonMood)
                 {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "(⌒‿⌒)");
-                    // do something
+                    await ShowMoodButtons(client, update.Message.Chat.Id);
                 }
-                else if (update.CallbackQuery != null) // Обработка callback-запросов
+                else if (update.CallbackQuery != null)
                 {
                     await HandleCallbackQuery(client, update.CallbackQuery);
                 }
-                else
+                else if (!string.IsNullOrEmpty(update.Message?.Text))
                 {
-                    if (userStates.ContainsKey(update.Message.Chat.Id) && userStates[update.Message.Chat.Id] == "awaiting_hr_question")
+                    string userMessage = update.Message.Text;
+                    if (userStates.ContainsKey(update.Message.Chat.Id) && userStates[update.Message.Chat.Id] == "awaiting_mood_selection")
                     {
-                        // сброс состояния пользователя
+                        // Добавляем запись настроения в базу данных
+                        int moodId = _db.GetMoodId(userMessage);
+                        if (moodId != -1)
+                        {
+                            _db.AddMoodRecord(update.Message.From.Username, moodId);
+                            await client.SendTextMessageAsync(update.Message.Chat.Id, "Ваше настроение успешно записано!");
+                        }
+                        else
+                        {
+                            await client.SendTextMessageAsync(update.Message.Chat.Id, "Извините, настроение не распознано. Выберите настроение из предложенных кнопок.");
+                        }
+
                         userStates.Remove(update.Message.Chat.Id);
-
-                        // перессылка вопроса HR (пока себе)
-                        string userQuestion = update.Message.Text;
-                        string userName = update.Message.From.Username != null ? $"@{update.Message.From.Username}" : update.Message.From.FirstName;
-
-                        await client.SendTextMessageAsync(botOwnerID, $"Вопрос от {userName}:\n{userQuestion}");
-                        await client.SendTextMessageAsync(update.Message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
                     }
-                    else // всё, что отправляется просто так считаем вопросами
+                    else
                     {
-                        string userQuestion = update.Message.Text;
-                        string answer = FindAnswer(userQuestion);
+                        string answer = FindAnswer(userMessage);
                         await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, answer, parseMode: ParseMode.MarkdownV2);
                     }
                 }
@@ -92,18 +94,17 @@ namespace Чат_бот_для_Simpl
             }
         }
 
-        // кнопочки в клавиатуре
         private IReplyMarkup MyButtonsy()
         {
             return new ReplyKeyboardMarkup(
                 new List<List<KeyboardButton>>
                 {
-                    new List<KeyboardButton> // первая строка кнопочек
+                    new List<KeyboardButton>
                     {
                         new KeyboardButton(ButtonFAQ),
                         new KeyboardButton(ButtonHR)
                     },
-                    new List<KeyboardButton> // вторая строка кнопочек
+                    new List<KeyboardButton>
                     {
                         new KeyboardButton(ButtonMood)
                     }
@@ -114,7 +115,6 @@ namespace Чат_бот_для_Simpl
             };
         }
 
-        // отображает inline клавиатуру с вопросами
         private async Task ShowFAQ(ITelegramBotClient client, long chatId)
         {
             try
@@ -127,7 +127,7 @@ namespace Чат_бот_для_Simpl
                 await client.SendTextMessageAsync(chatId, "Произошла ошибка при выводе FAQ.");
             }
         }
-        // создаём inline клавиаутур из вопросов, хранящихся в словаре
+
         private InlineKeyboardMarkup BuildInlineKeyboard()
         {
             var inlineKeyboard = new List<List<InlineKeyboardButton>>();
@@ -143,36 +143,38 @@ namespace Чат_бот_для_Simpl
 
             return new InlineKeyboardMarkup(inlineKeyboard);
         }
-        //для обработки ответов с inline клавиатуры
+
         private async Task HandleCallbackQuery(ITelegramBotClient client, CallbackQuery callbackQuery)
         {
             try
             {
-                string question = callbackQuery.Data;
+                string data = callbackQuery.Data;
 
-                if (_faq.ContainsKey(question))
+                if (_faq.ContainsKey(data))
                 {
-                    string answer = _faq[question];
-                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
+                    string answer = _faq[data];
+                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {data}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
 
-                    // Проверка и добавление записи в историю вопросов
                     string tgNickname = callbackQuery.From.Username;
                     int employeeId = _db.GetEmployeeId(tgNickname);
                     if (employeeId != -1)
                     {
-                        int questionId = _db.GetQuestionId(question); // Получаем question_id по тексту вопроса
+                        int questionId = _db.GetQuestionId(data);
                         if (questionId != -1)
                         {
                             _db.AddQuestionHistoryRecord(employeeId, questionId);
                         }
                     }
                 }
+                else if (data.StartsWith("mood_"))
+                {
+                    await HandleMoodSelection(client, callbackQuery);
+                }
                 else
                 {
                     await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Ответ на этот вопрос не найден.");
                 }
 
-                // Удаление инлайн клавиатуры после нажатия
                 await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
             }
             catch (Exception ex)
@@ -180,23 +182,50 @@ namespace Чат_бот_для_Simpl
                 Console.WriteLine($"Ошибка при обработке callback-запроса: {ex.Message}");
             }
         }
-        // Метод для получения ответа на вопрос
+
+        private async Task HandleMoodSelection(ITelegramBotClient client, CallbackQuery callbackQuery)
+        {
+            string mood = callbackQuery.Data.Replace("mood_", "");
+            string tgNickname = callbackQuery.From.Username;
+            int moodId = _db.GetMoodId(mood);
+
+            if (moodId != -1)
+            {
+                _db.AddMoodRecord(tgNickname, moodId);
+                await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Ваше настроение '{mood}' было успешно сохранено.");
+            }
+            else
+            {
+                await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Произошла ошибка при сохранении настроения.");
+            }
+        }
+
+        private async Task ShowMoodButtons(ITelegramBotClient client, long chatId)
+        {
+            var moodButtons = new InlineKeyboardMarkup(new[]
+            {
+                new[] { InlineKeyboardButton.WithCallbackData("Хорошее", "mood_Хорошее") },
+                new[] { InlineKeyboardButton.WithCallbackData("Нейтральное", "mood_Нейтральное") },
+                new[] { InlineKeyboardButton.WithCallbackData("Плохое", "mood_Плохое") }
+            });
+
+            await client.SendTextMessageAsync(chatId, "Выберите ваше настроение:", replyMarkup: moodButtons);
+        }
+
         private string FindAnswer(string userQuestion)
         {
-            // Прямое совпадение
             if (_faq.TryGetValue(userQuestion, out string directAnswer))
             {
                 return directAnswer;
             }
 
-            // Нечеткий поиск с использованием FuzzySharp
             var fuzzyMatch = _faq.OrderByDescending(qa => Fuzz.Ratio(qa.Key, userQuestion)).FirstOrDefault();
-            if (fuzzyMatch.Key != null && Fuzz.Ratio(fuzzyMatch.Key, userQuestion) > 60) // Пороговое значение 70
+            if (fuzzyMatch.Key != null && Fuzz.Ratio(fuzzyMatch.Key, userQuestion) > 60)
             {
                 return fuzzyMatch.Value;
             }
 
-            return "Извините, на такой вопрос пока нет ответа\\.";
+            return "Извините, на такой вопрос пока нет ответа.";
         }
     }
 }
