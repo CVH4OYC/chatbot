@@ -31,7 +31,7 @@ namespace Чат_бот_для_Simpl
             Console.WriteLine("Бот запущен");
 
             // подписка на получение сообщений от обработчика
-            MessageHandler messageHandler = new MessageHandler(_faq);
+            MessageHandler messageHandler = new MessageHandler(_faq, _db);
             OnMessage += messageHandler.OnMessage;
         }
 

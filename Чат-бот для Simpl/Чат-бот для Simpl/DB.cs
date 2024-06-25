@@ -54,6 +54,89 @@ namespace Чат_бот_для_Simpl
 
                 return faq;
             }
+            // проверка существования сотрудника в таблице Employee
+            public bool EmployeeExists(string tgNickname)
+            {
+                try
+                {
+                    using (var connection = new NpgsqlConnection(_connectionString))
+                    {
+                        connection.Open();
+
+                        using (var command = new NpgsqlCommand("SELECT COUNT(*) FROM employee WHERE tg_nickname = @tgNickname", connection))
+                        {
+                            command.Parameters.AddWithValue("tgNickname", tgNickname);
+                            var count = (long)command.ExecuteScalar();
+                            return count > 0;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при проверке существования сотрудника: {ex.Message}");
+                    return false;
+                }
+            }
+            // добавление записи в таблицу Question_History
+            public void AddQuestionHistoryRecord(int employeeId, int questionId)
+            {
+                try
+                {
+                    using var connection = new NpgsqlConnection(_connectionString);
+                    connection.Open();
+
+                    using var command = new NpgsqlCommand("INSERT INTO Question_History (employee_id, question_id, recording_date) VALUES (@employeeId, @questionId, @recordingDate)", connection);
+                    command.Parameters.AddWithValue("employeeId", employeeId);
+                    command.Parameters.AddWithValue("questionId", questionId);
+                    command.Parameters.AddWithValue("recordingDate", DateTime.UtcNow);
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при добавлении записи в историю вопросов: {ex.Message}");
+                }
+            }
+
+            // получение id вопроса из таблицы FAQ
+            public int GetQuestionId(string question)
+            {
+                try
+                {
+                    using var connection = new NpgsqlConnection(_connectionString);
+                    connection.Open();
+
+                    using var command = new NpgsqlCommand("SELECT faq_id FROM faq WHERE question = @question", connection);
+                    command.Parameters.AddWithValue("question", question);
+                    var result = command.ExecuteScalar();
+                    return result != null ? (int)result : -1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при получении идентификатора вопроса: {ex.Message}");
+                    return -1;
+                }
+            }
+            // получение id сотрудника
+            public int GetEmployeeId(string tgNickname)
+            {
+                try
+                {
+                    using var connection = new NpgsqlConnection(_connectionString);
+                    connection.Open();
+
+                    using var command = new NpgsqlCommand("SELECT employee_id FROM Employee WHERE tg_nickname = @tgNickname", connection);
+                    command.Parameters.AddWithValue("tgNickname", tgNickname);
+                    var result = command.ExecuteScalar();
+                    return result != null ? (int)result : -1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при получении идентификатора сотрудника: {ex.Message}");
+                    return -1;
+                }
+            }
+
         }
     }
 
