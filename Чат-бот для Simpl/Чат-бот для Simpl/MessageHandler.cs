@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using Чат_бот_для_Simpl.Чат_бот_для_Simpl;
+using FuzzySharp;
 
 namespace Чат_бот_для_Simpl
 {
@@ -15,15 +18,18 @@ namespace Чат_бот_для_Simpl
 
         private long botOwnerID = 746106815; // временное айди HR
 
-        // словарь для отслеживания состояния пользователей
+        // словарь для отслеживания состояния пользователей (для связи с HR и указания настроения)
         private Dictionary<long, string> userStates = new Dictionary<long, string>();
 
         // словарь с вопросами и ответами 
         private Dictionary<string, string> _faq;
         private InlineKeyboardMarkup _faqInlineKeyboard; // Кэш inline клавиатуры FAQ
-        public MessageHandler(Dictionary<string, string> faq)
+
+        private Database _db; // через этот объект обращение к бд (в Database прописать нужные методы)
+        public MessageHandler(Dictionary<string, string> faq, Database db)
         {
             _faq = faq;
+            _db = db;
             _faqInlineKeyboard = BuildInlineKeyboard();
         }
         public async void OnMessage(ITelegramBotClient client, Update update)
@@ -32,7 +38,7 @@ namespace Чат_бот_для_Simpl
             {
                 if (update.Message?.Text == "/start")
                 {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Приветствую!", replyMarkup: MyButtonsy());
+                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Привет :)  Я рад, что ты присоединился к Simpl!", replyMarkup: MyButtonsy());
                 }
                 else if (update.Message?.Text == "/help")
                 {
@@ -71,9 +77,11 @@ namespace Чат_бот_для_Simpl
                         await client.SendTextMessageAsync(botOwnerID, $"Вопрос от {userName}:\n{userQuestion}");
                         await client.SendTextMessageAsync(update.Message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
                     }
-                    else
+                    else // всё, что отправляется просто так считаем вопросами
                     {
-                        await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, update.Message?.Text ?? "[не текст]");
+                        string userQuestion = update.Message.Text;
+                        string answer = FindAnswer(userQuestion);
+                        await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, answer, parseMode: ParseMode.MarkdownV2);
                     }
                 }
             }
@@ -146,6 +154,18 @@ namespace Чат_бот_для_Simpl
                 {
                     string answer = _faq[question];
                     await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
+
+                    // Проверка и добавление записи в историю вопросов
+                    string tgNickname = callbackQuery.From.Username;
+                    int employeeId = _db.GetEmployeeId(tgNickname);
+                    if (employeeId != -1)
+                    {
+                        int questionId = _db.GetQuestionId(question); // Получаем question_id по тексту вопроса
+                        if (questionId != -1)
+                        {
+                            _db.AddQuestionHistoryRecord(employeeId, questionId);
+                        }
+                    }
                 }
                 else
                 {
@@ -159,6 +179,24 @@ namespace Чат_бот_для_Simpl
             {
                 Console.WriteLine($"Ошибка при обработке callback-запроса: {ex.Message}");
             }
+        }
+        // Метод для получения ответа на вопрос
+        private string FindAnswer(string userQuestion)
+        {
+            // Прямое совпадение
+            if (_faq.TryGetValue(userQuestion, out string directAnswer))
+            {
+                return directAnswer;
+            }
+
+            // Нечеткий поиск с использованием FuzzySharp
+            var fuzzyMatch = _faq.OrderByDescending(qa => Fuzz.Ratio(qa.Key, userQuestion)).FirstOrDefault();
+            if (fuzzyMatch.Key != null && Fuzz.Ratio(fuzzyMatch.Key, userQuestion) > 60) // Пороговое значение 70
+            {
+                return fuzzyMatch.Value;
+            }
+
+            return "Извините, на такой вопрос пока нет ответа\\.";
         }
     }
 }
