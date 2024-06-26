@@ -1,4 +1,4 @@
-﻿using Npgsql;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using Telegram.Bot;
@@ -23,74 +23,117 @@ namespace Чат_бот_для_Simpl
 
         // словарь с вопросами и ответами 
         private Dictionary<string, string> _faq;
+        
         private InlineKeyboardMarkup _faqInlineKeyboard; // Кэш inline клавиатуры FAQ
 
         private Database _db; // через этот объект обращение к бд (в Database прописать нужные методы)
+
+        private Dictionary<int, string> _moods;
+
         public MessageHandler(Dictionary<string, string> faq, Database db)
         {
             _faq = faq;
             _db = db;
             _faqInlineKeyboard = BuildInlineKeyboard();
+            _moods = _db.LoadMoods();
         }
+
         public async void OnMessage(ITelegramBotClient client, Update update)
         {
             try
             {
-                if (update.Message?.Text == "/start")
+                if (update.Message != null)
                 {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Привет :)  Я рад, что ты присоединился к Simpl!", replyMarkup: MyButtonsy());
+                    var message = update.Message;
+
+                    if (message.Text == "/start")
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Привет :)  Я рад, что ты присоединился к Simpl!", replyMarkup: MyButtonsy());
+                    }
+                    else if (message.Text == "/help")
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Мои команды\n/start\n/help");
+                    }
+                    else if (message.Text == ButtonFAQ)
+                    {
+                        await ShowFAQ(client, message.Chat.Id);
+                    }
+                    else if (message.Text == ButtonHR)
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите ваш вопрос.");
+                        userStates[message.Chat.Id] = "awaiting_hr_question";
+                    }
+                    else if (message.Text == ButtonMood)
+                    {
+                        await ShowMoodSelection(client, message.Chat.Id);
+                    }
+                    else
+                    {
+                        if (userStates.ContainsKey(message.Chat.Id) && userStates[message.Chat.Id] == "awaiting_hr_question")
+                        {
+                            userStates.Remove(message.Chat.Id);
+
+                            string userQuestion = message.Text;
+                            string userName = message.From.Username != null ? $"@{message.From.Username}" : message.From.FirstName;
+
+                            await client.SendTextMessageAsync(botOwnerID, $"Вопрос от {userName}:\n{userQuestion}");
+                            await client.SendTextMessageAsync(message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
+                        }
+                        else
+                        {
+                            string userQuestion = message.Text;
+                            string answer = FindAnswer(userQuestion);
+                            await client.SendTextMessageAsync(message.Chat.Id, answer, parseMode: ParseMode.MarkdownV2);
+                        }
+                    }
                 }
-                else if (update.Message?.Text == "/help")
-                {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Мои команды\n/start\n/help");
-                }
-                else if (update.Message?.Text == ButtonFAQ)
-                {
-                    await ShowFAQ(client, update.Message.Chat.Id);
-                }
-                else if (update.Message?.Text == ButtonHR)
-                {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Пожалуйста, введите ваш вопрос.");
-                    // состояние пользователя в ожидании вопроса
-                    userStates[update.Message.Chat.Id] = "awaiting_hr_question";
-                }
-                else if (update.Message?.Text == ButtonMood)
-                {
-                    await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "(⌒‿⌒)");
-                    // do something
-                }
-                else if (update.CallbackQuery != null) // Обработка callback-запросов
+                else if (update.CallbackQuery != null)
                 {
                     await HandleCallbackQuery(client, update.CallbackQuery);
-                }
-                else
-                {
-                    if (userStates.ContainsKey(update.Message.Chat.Id) && userStates[update.Message.Chat.Id] == "awaiting_hr_question")
-                    {
-                        // сброс состояния пользователя
-                        userStates.Remove(update.Message.Chat.Id);
-
-                        // перессылка вопроса HR (пока себе)
-                        string userQuestion = update.Message.Text;
-                        string userName = update.Message.From.Username != null ? $"@{update.Message.From.Username}" : update.Message.From.FirstName;
-
-                        await client.SendTextMessageAsync(botOwnerID, $"Вопрос от {userName}:\n{userQuestion}");
-                        await client.SendTextMessageAsync(update.Message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
-                    }
-                    else // всё, что отправляется просто так считаем вопросами
-                    {
-                        string userQuestion = update.Message.Text;
-                        string answer = FindAnswer(userQuestion);
-                        await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, answer, parseMode: ParseMode.MarkdownV2);
-                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка: {ex.Message}");
-                await client.SendTextMessageAsync(update.Message?.Chat.Id ?? botOwnerID, "Произошла ошибка, попробуйте снова позже.");
+                if (update.Message != null)
+                {
+                    await client.SendTextMessageAsync(update.Message.Chat.Id, "Произошла ошибка, попробуйте снова позже.");
+                }
+                else if (update.CallbackQuery != null)
+                {
+                    await client.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, "Произошла ошибка, попробуйте снова позже.");
+                }
             }
         }
+
+        private async Task ShowMoodSelection(ITelegramBotClient client, long chatId)
+        {
+            try
+            {
+                var moods = _db.LoadMoods();
+                if (moods.Count == 0)
+                {
+                    await client.SendTextMessageAsync(chatId, "Нет доступных настроений.");
+                    return;
+                }
+
+                var buttons = new List<InlineKeyboardButton>();
+                foreach (var mood in moods)
+                {
+                    buttons.Add(InlineKeyboardButton.WithCallbackData(mood.Value, $"mood_{mood.Key}"));
+                }
+
+                var inlineKeyboard = new InlineKeyboardMarkup(buttons.Select(b => new List<InlineKeyboardButton> { b }));
+
+                await client.SendTextMessageAsync(chatId, "Выберите ваше настроение:", replyMarkup: inlineKeyboard);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при отображении настроений: {ex.Message}");
+                await client.SendTextMessageAsync(chatId, "Произошла ошибка при отображении настроений.");
+            }
+        }
+
 
         // кнопочки в клавиатуре
         private IReplyMarkup MyButtonsy()
@@ -148,38 +191,60 @@ namespace Чат_бот_для_Simpl
         {
             try
             {
-                string question = callbackQuery.Data;
+                string data = callbackQuery.Data;
 
-                if (_faq.ContainsKey(question))
+                if (data.StartsWith("mood_"))
                 {
+                    int moodId = int.Parse(data.Substring("mood_".Length));
+                    string tgNickname = callbackQuery.From.Username;
+                    int employeeId = _db.GetEmployeeId(tgNickname);
+
+                    if (employeeId != -1)
+                    {
+                        _db.UpsertMoodHistory(employeeId, moodId);
+                        await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Ваше настроение было обновлено.");
+                    }
+                    else
+                    {
+                        await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Не удалось определить вас как сотрудника.");
+                    }
+
+                    await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
+                }
+                else if (_faq.ContainsKey(data))
+                {
+                    string question = data;
                     string answer = _faq[question];
                     await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
 
-                    // Проверка и добавление записи в историю вопросов
                     string tgNickname = callbackQuery.From.Username;
                     int employeeId = _db.GetEmployeeId(tgNickname);
                     if (employeeId != -1)
                     {
-                        int questionId = _db.GetQuestionId(question); // Получаем question_id по тексту вопроса
+                        int questionId = _db.GetQuestionId(question);
                         if (questionId != -1)
                         {
                             _db.AddQuestionHistoryRecord(employeeId, questionId);
                         }
                     }
+
+                    await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
                 }
                 else
                 {
                     await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Ответ на этот вопрос не найден.");
+                    await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
                 }
-
-                // Удаление инлайн клавиатуры после нажатия
-                await client.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при обработке callback-запроса: {ex.Message}");
+                await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Произошла ошибка при обработке запроса.");
             }
         }
+
+
+
         // Метод для получения ответа на вопрос
         private string FindAnswer(string userQuestion)
         {
