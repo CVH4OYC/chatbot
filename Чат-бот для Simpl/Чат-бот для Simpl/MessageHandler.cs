@@ -16,7 +16,10 @@ namespace Чат_бот_для_Simpl
         const string ButtonHR = "Связаться с HR";
         const string ButtonMood = "Мое настроение o(>ω<)o";
 
-        private long botOwnerID = 746106815; // временное айди HR
+        const string ButtonSetMood = "Указать сегодняшнее настроение";
+        const string ButtonGetMoodHistory = "Узнать настроение за последние 5 дней";
+
+        private long botOwnerID; //айди HR
 
         // словарь для отслеживания состояния пользователей (для связи с HR и указания настроения)
         private Dictionary<long, string> userStates = new Dictionary<long, string>();
@@ -30,12 +33,22 @@ namespace Чат_бот_для_Simpl
 
         private Dictionary<int, string> _moods;
 
-        public MessageHandler(Dictionary<string, string> faq, Database db)
+        public MessageHandler(Dictionary<string, string> faq, Database db,string HRid)
         {
             _faq = faq;
             _db = db;
             _faqInlineKeyboard = BuildInlineKeyboard();
             _moods = _db.LoadMoods();
+            // Преобразование строки HRid в тип long
+            if (long.TryParse(HRid, out long result))
+            {
+                botOwnerID = result;
+            }
+            else
+            {
+                // Обработка случая, когда строка не может быть преобразована в long
+                throw new ArgumentException("Неверный формат строки для HRid.");
+            }
         }
 
         public async void OnMessage(ITelegramBotClient client, Update update)
@@ -60,12 +73,24 @@ namespace Чат_бот_для_Simpl
                     }
                     else if (message.Text == ButtonHR)
                     {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите ваш вопрос.");
+                        await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите сообщение для HR.");
                         userStates[message.Chat.Id] = "awaiting_hr_question";
                     }
                     else if (message.Text == ButtonMood)
                     {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: MoodButtons());
+                    }
+                    else if (message.Text == ButtonSetMood)
+                    {
                         await ShowMoodSelection(client, message.Chat.Id);
+                    }
+                    else if (message.Text == ButtonGetMoodHistory)
+                    {
+                        await ShowMoodHistory(client, message.Chat.Id);
+                    }
+                    else if (message.Text == "Назад")
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Вы вернулись к основному меню.", replyMarkup: MyButtonsy());
                     }
                     else
                     {
@@ -75,8 +100,8 @@ namespace Чат_бот_для_Simpl
 
                             string userQuestion = message.Text;
                             string userName = message.From.Username != null ? $"@{message.From.Username}" : message.From.FirstName;
-
-                            await client.SendTextMessageAsync(botOwnerID, $"Вопрос от {userName}:\n{userQuestion}");
+                            _db.SaveHRRequest(message.From.Username, userQuestion);
+                            await client.SendTextMessageAsync(botOwnerID, $"Сообщение от {userName}:\n{userQuestion}");
                             await client.SendTextMessageAsync(message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
                         }
                         else
@@ -106,33 +131,7 @@ namespace Чат_бот_для_Simpl
             }
         }
 
-        private async Task ShowMoodSelection(ITelegramBotClient client, long chatId)
-        {
-            try
-            {
-                var moods = _db.LoadMoods();
-                if (moods.Count == 0)
-                {
-                    await client.SendTextMessageAsync(chatId, "Нет доступных настроений.");
-                    return;
-                }
 
-                var buttons = new List<InlineKeyboardButton>();
-                foreach (var mood in moods)
-                {
-                    buttons.Add(InlineKeyboardButton.WithCallbackData(mood.Value, $"mood_{mood.Key}"));
-                }
-
-                var inlineKeyboard = new InlineKeyboardMarkup(buttons.Select(b => new List<InlineKeyboardButton> { b }));
-
-                await client.SendTextMessageAsync(chatId, "Выберите ваше настроение:", replyMarkup: inlineKeyboard);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при отображении настроений: {ex.Message}");
-                await client.SendTextMessageAsync(chatId, "Произошла ошибка при отображении настроений.");
-            }
-        }
 
 
         // кнопочки в клавиатуре
@@ -150,6 +149,26 @@ namespace Чат_бот_для_Simpl
                     {
                         new KeyboardButton(ButtonMood)
                     }
+                }
+            )
+            {
+                ResizeKeyboard = true
+            };
+        }
+        private IReplyMarkup MoodButtons()
+        {
+            return new ReplyKeyboardMarkup(
+                new List<List<KeyboardButton>>
+                {
+            new List<KeyboardButton> // первая строка кнопочек
+            {
+                new KeyboardButton(ButtonSetMood),
+                new KeyboardButton(ButtonGetMoodHistory)
+            },
+            new List<KeyboardButton> // вторая строка кнопочек
+            {
+                new KeyboardButton("Назад")
+            }
                 }
             )
             {
@@ -215,7 +234,7 @@ namespace Чат_бот_для_Simpl
                 {
                     string question = data;
                     string answer = _faq[question];
-                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"Вопрос: {question}\nОтвет:\n {answer}", parseMode: ParseMode.MarkdownV2);
+                    await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"*Вопрос:*\n{question}\n*Ответ:*\n{answer}", parseMode: ParseMode.MarkdownV2);
 
                     string tgNickname = callbackQuery.From.Username;
                     int employeeId = _db.GetEmployeeId(tgNickname);
@@ -263,5 +282,77 @@ namespace Чат_бот_для_Simpl
 
             return "Извините, на такой вопрос пока нет ответа\\.";
         }
+        private async Task ShowMoodSelection(ITelegramBotClient client, long chatId)
+        {
+            try
+            {
+                string tgNickname = client.GetChatAsync(chatId).Result.Username;
+                if (_db.EmployeeExists(tgNickname))
+                {
+                    var moods = _db.LoadMoods();
+                    if (moods.Count == 0)
+                    {
+                        await client.SendTextMessageAsync(chatId, "Нет доступных настроений.");
+                        return;
+                    }
+
+                    var buttons = new List<InlineKeyboardButton>();
+                    foreach (var mood in moods)
+                    {
+                        buttons.Add(InlineKeyboardButton.WithCallbackData(mood.Value, $"mood_{mood.Key}"));
+                    }
+
+                    var inlineKeyboard = new InlineKeyboardMarkup(buttons.Select(b => new List<InlineKeyboardButton> { b }));
+
+                    await client.SendTextMessageAsync(chatId, "Выберите ваше настроение:", replyMarkup: inlineKeyboard);
+                }
+                else
+                {
+                    await client.SendTextMessageAsync(chatId, "Не удалось определить вас как сотрудника.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при отображении настроений: {ex.Message}");
+                await client.SendTextMessageAsync(chatId, "Произошла ошибка при отображении настроений.");
+            }
+        }
+        private async Task ShowMoodHistory(ITelegramBotClient client, long chatId)
+        {
+            try
+            {
+                string tgNickname = client.GetChatAsync(chatId).Result.Username;
+                int employeeId = _db.GetEmployeeId(tgNickname);
+
+                if (employeeId != -1)
+                {
+                    var moodHistory = _db.GetMoodHistory(employeeId, 5);
+                    if (moodHistory.Count > 0)
+                    {
+                        string historyText = "Ваше настроение за последние 5 дней:\n\n";
+                        foreach (var record in moodHistory)
+                        {
+                            historyText += $"{record.Key.ToShortDateString()}: {record.Value}\n";
+                        }
+
+                        await client.SendTextMessageAsync(chatId, historyText);
+                    }
+                    else
+                    {
+                        await client.SendTextMessageAsync(chatId, "Нет записей о вашем настроении за последние 5 дней.");
+                    }
+                }
+                else
+                {
+                    await client.SendTextMessageAsync(chatId, "Не удалось определить вас как сотрудника.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении истории настроений: {ex.Message}");
+                await client.SendTextMessageAsync(chatId, "Произошла ошибка при получении истории настроений.");
+            }
+        }
+
     }
 }

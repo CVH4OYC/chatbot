@@ -22,9 +22,9 @@ namespace Чат_бот_для_Simpl
                 var config = ReadJSON(path);
                 var token = config["Token"]; // считываем токен
                 var dbConnectionString = $"Host={config["Host"]};Port={config["Port"]};Username={config["Username"]};Password={config["Password"]};Database={config["DatabaseName"]};Ssl Mode=Require;Trust Server Certificate=true;";
+                var botOwnerId = config["HRid"]; 
 
-
-                Host bot = new Host(token, dbConnectionString);
+                Host bot = new Host(token, dbConnectionString,botOwnerId);
                 bot.Start();
                 Console.ReadLine();
             }

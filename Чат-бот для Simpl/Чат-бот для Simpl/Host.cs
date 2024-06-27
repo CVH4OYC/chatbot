@@ -16,13 +16,15 @@ namespace Чат_бот_для_Simpl
 
         private Database _db;
         private Dictionary<string, string> _faq;
+        private string _botOwnerId;
 
 
-        public Host(string token, string dbConnectionString)
+        public Host(string token, string dbConnectionString, string botOwnerId)
         {
             _bot = new TelegramBotClient(token);
             _db = new Database(dbConnectionString); // используем загрузчик из базы данных
             _faq = _db.LoadFAQ(); // загрузка FAQ из базы данных
+            _botOwnerId = botOwnerId;
         }
 
         public void Start()
@@ -31,7 +33,7 @@ namespace Чат_бот_для_Simpl
             Console.WriteLine("Бот запущен");
 
             // подписка на получение сообщений от обработчика
-            MessageHandler messageHandler = new MessageHandler(_faq, _db);
+            MessageHandler messageHandler = new MessageHandler(_faq, _db,_botOwnerId);
             OnMessage += messageHandler.OnMessage;
         }
 
