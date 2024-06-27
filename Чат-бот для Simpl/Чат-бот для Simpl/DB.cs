@@ -226,6 +226,66 @@ namespace Чат_бот_для_Simpl
                     return -1;
                 }
             }
+            // метод для получения истории настроения за 5 дней
+            public Dictionary<DateTime, string> GetMoodHistory(int employeeId, int days)
+            {
+                var moodHistory = new Dictionary<DateTime, string>();
+
+                try
+                {
+                    using (var connection = new NpgsqlConnection(_connectionString))
+                    {
+                        connection.Open();
+
+                        string query = @"
+                SELECT recording_date, mood_name
+                FROM Mood_History mh
+                JOIN Mood m ON mh.mood_id = m.mood_id
+                WHERE employee_id = @employeeId AND recording_date >= CURRENT_DATE - INTERVAL '" + days + @" DAYS'
+                ORDER BY recording_date ASC";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("employeeId", employeeId);
+
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    DateTime recordingDate = reader.GetDateTime(0);
+                                    string moodName = reader.GetString(1);
+                                    moodHistory[recordingDate] = moodName;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при чтении истории настроений: {ex.Message}");
+                }
+
+                return moodHistory;
+            }
+            public void SaveHRRequest(string senderTgNickname, string request)
+            {
+                try
+                {
+                    using (var connection = new NpgsqlConnection(_connectionString))
+                    {
+                        connection.Open();
+                        using var command = new NpgsqlCommand("INSERT INTO HR_requests_history (sender_tg_nickname, request, recording_date) VALUES (@nickname, @request, @date)", connection);
+                        command.Parameters.AddWithValue("nickname", senderTgNickname);
+                        command.Parameters.AddWithValue("request", request);
+                        command.Parameters.AddWithValue("date", DateTime.UtcNow);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при сохранении запроса HR: {ex.Message}");
+                }
+            }
 
         }
     }
