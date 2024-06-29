@@ -58,57 +58,71 @@ namespace Чат_бот_для_Simpl
                 if (update.Message != null)
                 {
                     var message = update.Message;
-
-                    if (message.Text == "/start")
+                    if (message.Type != MessageType.Text)
                     {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Привет :)  Я рад, что ты присоединился к Simpl!", replyMarkup: MyButtonsy());
-                    }
-                    else if (message.Text == "/help")
-                    {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Мои команды\n/start\n/help");
-                    }
-                    else if (message.Text == ButtonFAQ)
-                    {
-                        await ShowFAQ(client, message.Chat.Id);
-                    }
-                    else if (message.Text == ButtonHR)
-                    {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите сообщение для HR.");
-                        userStates[message.Chat.Id] = "awaiting_hr_question";
-                    }
-                    else if (message.Text == ButtonMood)
-                    {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: MoodButtons());
-                    }
-                    else if (message.Text == ButtonSetMood)
-                    {
-                        await ShowMoodSelection(client, message.Chat.Id);
-                    }
-                    else if (message.Text == ButtonGetMoodHistory)
-                    {
-                        await ShowMoodHistory(client, message.Chat.Id);
-                    }
-                    else if (message.Text == "Назад")
-                    {
-                        await client.SendTextMessageAsync(message.Chat.Id, "Вы вернулись к основному меню.", replyMarkup: MyButtonsy());
+                        await client.SendTextMessageAsync(message.Chat.Id, "Простите, но на данный момент, бот работает только с текстовыми сообщениями и эмодзи.");
                     }
                     else
                     {
-                        if (userStates.ContainsKey(message.Chat.Id) && userStates[message.Chat.Id] == "awaiting_hr_question")
+                        if (message.Text == "/start")
                         {
-                            userStates.Remove(message.Chat.Id);
-
-                            string userQuestion = message.Text;
-                            string userName = message.From.Username != null ? $"@{message.From.Username}" : message.From.FirstName;
-                            _db.SaveHRRequest(message.From.Username, userQuestion);
-                            await client.SendTextMessageAsync(botOwnerID, $"Сообщение от {userName}:\n{userQuestion}");
-                            await client.SendTextMessageAsync(message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
+                            await client.SendTextMessageAsync(message.Chat.Id, "Привет :)  Я рад, что ты присоединился к Simpl!", replyMarkup: MyButtonsy());
+                        }
+                        else if (message.Text == "/help")
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Мои команды\n/start\n/help");
+                        }
+                        else if (message.Text == ButtonFAQ)
+                        {
+                            await ShowFAQ(client, message.Chat.Id);
+                        }
+                        else if (message.Text == ButtonHR)
+                        {
+                            if (message.From.Username != null) // если ник в тг не указан, то просим оставить контакты
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите сообщение для HR.");
+                                userStates[message.Chat.Id] = "awaiting_hr_question";
+                            }
+                            else
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Пожалуйста, введите сообщение для HR\\.\n*У вас отсутствует имя пользоватля\\. Пожалуйста, укажите ваши контактные данные в сообщении, чтобы HR мог с вами связаться\\.*", parseMode: ParseMode.MarkdownV2);
+                                userStates[message.Chat.Id] = "awaiting_hr_question";
+                            }
+                        }
+                        else if (message.Text == ButtonMood)
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Выберите действие:", replyMarkup: MoodButtons());
+                        }
+                        else if (message.Text == ButtonSetMood)
+                        {
+                            await ShowMoodSelection(client, message.Chat.Id);
+                        }
+                        else if (message.Text == ButtonGetMoodHistory)
+                        {
+                            await ShowMoodHistory(client, message.Chat.Id);
+                        }
+                        else if (message.Text == "Назад")
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Вы вернулись к основному меню.", replyMarkup: MyButtonsy());
                         }
                         else
                         {
-                            string userQuestion = message.Text;
-                            string answer = FindAnswer(userQuestion);
-                            await client.SendTextMessageAsync(message.Chat.Id, answer, parseMode: ParseMode.MarkdownV2);
+                            if (userStates.ContainsKey(message.Chat.Id) && userStates[message.Chat.Id] == "awaiting_hr_question")
+                            {
+                                userStates.Remove(message.Chat.Id);
+
+                                string userQuestion = message.Text;
+                                string userName = message.From.Username != null ? $"@{message.From.Username}" : message.From.FirstName;
+                                _db.SaveHRRequest(message.From.Username != null ? message.From.Username : message.From.FirstName, userQuestion);
+                                await client.SendTextMessageAsync(botOwnerID, $"Сообщение от {userName}:\n{userQuestion}");
+                                await client.SendTextMessageAsync(message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
+                            }
+                            else
+                            {
+                                string userQuestion = message.Text;
+                                string answer = FindAnswer(userQuestion);
+                                await client.SendTextMessageAsync(message.Chat.Id, answer, parseMode: ParseMode.MarkdownV2);
+                            }
                         }
                     }
                 }
@@ -235,15 +249,18 @@ namespace Чат_бот_для_Simpl
                     string question = data;
                     string answer = _faq[question];
                     await client.SendTextMessageAsync(callbackQuery.Message.Chat.Id, $"*Вопрос:*\n{question}\n*Ответ:*\n{answer}", parseMode: ParseMode.MarkdownV2);
-
+   
                     string tgNickname = callbackQuery.From.Username;
-                    int employeeId = _db.GetEmployeeId(tgNickname);
-                    if (employeeId != -1)
+                    if (tgNickname != null)
                     {
-                        int questionId = _db.GetQuestionId(question);
-                        if (questionId != -1)
+                        int employeeId = _db.GetEmployeeId(tgNickname);
+                        if (employeeId != -1)
                         {
-                            _db.AddQuestionHistoryRecord(employeeId, questionId);
+                            int questionId = _db.GetQuestionId(question);
+                            if (questionId != -1)
+                            {
+                                _db.AddQuestionHistoryRecord(employeeId, questionId);
+                            }
                         }
                     }
 
@@ -353,6 +370,5 @@ namespace Чат_бот_для_Simpl
                 await client.SendTextMessageAsync(chatId, "Произошла ошибка при получении истории настроений.");
             }
         }
-
     }
 }
