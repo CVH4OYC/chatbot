@@ -127,7 +127,7 @@ namespace Чат_бот_для_Simpl
                         using (var command = new NpgsqlCommand(@"
                     INSERT INTO Mood_History (employee_id, mood_id, recording_date)
                     VALUES (@employeeId, @moodId, @recordingDate)
-                    ON CONFLICT (employee_id, recording_date_only)
+                    ON CONFLICT (employee_id, recording_date)
                     DO UPDATE SET mood_id = EXCLUDED.mood_id, recording_date = EXCLUDED.recording_date", connection))
                         {
                             command.Parameters.AddWithValue("employeeId", employeeId);
