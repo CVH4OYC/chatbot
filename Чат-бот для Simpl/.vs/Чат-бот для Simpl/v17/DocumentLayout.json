@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|c:\\users\\79048\\documents\\github\\chatbot\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\messagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|solutionrelative:\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\messagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|c:\\users\\79048\\documents\\github\\chatbot\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|solutionrelative:\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|c:\\users\\79048\\documents\\github\\chatbot\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\messagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|solutionrelative:\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\messagehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BD1FCECD-C230-4F21-A714-9A89E69948A2}|\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl.csproj|c:\\users\\79048\\documents\\github\\chatbot\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\\u0447\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F simpl\\host.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,17 +30,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "DB.cs",
               "DocumentMoniker": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\DB.cs",
               "RelativeDocumentMoniker": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\DB.cs",
               "ToolTip": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\DB.cs",
               "RelativeToolTip": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\DB.cs",
-              "ViewState": "AQIAAPoAAAAAAAAAAAAuwNEAAAANAAAA",
+              "ViewState": "AQIAAHkAAAAAAAAAAAAAwFwAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-24T11:40:46.31Z",
               "EditorCaption": ""
@@ -55,8 +55,7 @@
               "RelativeToolTip": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\Config.JSON",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-06-20T13:07:14.296Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-20T13:07:14.296Z"
             },
             {
               "$type": "Document",
@@ -68,21 +67,19 @@
               "RelativeToolTip": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\Host.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T18:20:05.807Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T18:20:05.807Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MessageHandler.cs",
               "DocumentMoniker": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\MessageHandler.cs",
               "RelativeDocumentMoniker": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\MessageHandler.cs",
               "ToolTip": "C:\\Users\\79048\\Documents\\GitHub\\chatbot\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\MessageHandler.cs",
               "RelativeToolTip": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl\\MessageHandler.cs",
-              "ViewState": "AQIAAAQAAAAAAAAAAAAcwA8AAAAlAAAA",
+              "ViewState": "AQIAAN4AAAAAAAAAAAA+wO0AAABTAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-11T11:25:45.505Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-11T11:25:45.505Z"
             },
             {
               "$type": "Document",
@@ -95,8 +92,7 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "OverriddenGroupName": "\u0427\u0430\u0442-\u0431\u043E\u0442 \u0434\u043B\u044F Simpl",
-              "WhenOpened": "2024-06-10T11:54:19.357Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T11:54:19.357Z"
             }
           ]
         }
