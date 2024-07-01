@@ -146,7 +146,7 @@ namespace Чат_бот_для_Simpl
 
             // проверка существования сотрудника в таблице Employee
             public bool EmployeeExists(string tgNickname)
-            {
+            {   
                 if (string.IsNullOrEmpty(tgNickname)) return false;
                 try
                 {
