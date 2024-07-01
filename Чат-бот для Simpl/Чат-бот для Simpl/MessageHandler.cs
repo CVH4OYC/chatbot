@@ -114,7 +114,7 @@ namespace Чат_бот_для_Simpl
                                 string userQuestion = message.Text;
                                 string userName = message.From.Username != null ? $"@{message.From.Username}" : message.From.FirstName;
                                 _db.SaveHRRequest(message.From.Username != null ? message.From.Username : message.From.FirstName, userQuestion);
-                                await client.SendTextMessageAsync(botOwnerID, $"Сообщение от {userName}:\n{userQuestion}");
+                                await client.SendTextMessageAsync(botOwnerID, $"Сообщение от {userName}:\n{userQuestion}", replyMarkup: MyButtonsy());
                                 await client.SendTextMessageAsync(message.Chat.Id, "Ок, HR с Вами свяжется, ожидайте.");
                             }
                             else
